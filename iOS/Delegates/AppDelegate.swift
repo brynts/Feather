@@ -234,6 +234,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIOnboardingViewControlle
 	}
 }
 
+struct UIOnboardingHelper {
+    // App Icon
+    static func setUpIcon() -> UIImage {
+        return Bundle.main.appIcon ?? .init(named: "onboarding-icon")!
+    }
+}
+
 extension UIOnboardingViewConfiguration {
 	static func setUp() -> Self {
 		let welcomeToLine = NSMutableAttributedString(string: String.localized("ONBOARDING_WELCOMETITLE_1"))
@@ -278,7 +285,7 @@ extension UIOnboardingViewConfiguration {
 		)
 		
 		return .init(
-			appIcon: .init(named: "AppIcon")!,
+            appIcon: UIOnboardingHelper.setUpIcon(),
 			firstTitleLine: welcomeToLine,
 			secondTitleLine: featherLine,
 			features: onboardingFeatures,

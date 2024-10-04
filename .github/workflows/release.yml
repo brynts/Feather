@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -19,7 +19,7 @@ jobs:
 
       - name: Select Xcode 15.1
         run: | 
-          sudo xcode-select -s /Applications/Xcode_15.1.app/Contents/Developer
+          sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
           mkdir upload
 
       - name: Compile f
