@@ -17,7 +17,7 @@ jobs:
           sudo install -m755 ldid_macosx_x86_64 /usr/local/bin/ldid
           brew install 7zip gnu-sed
 
-      - name: Select Xcode 15.1
+      - name: Select Xcode 16
         run: | 
           sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
           mkdir upload
