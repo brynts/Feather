@@ -27,12 +27,15 @@ class LibraryViewController: UITableViewController {
 	required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 	
 	override func viewDidLoad() {
-		super.viewDidLoad()
-		setupViews()
-		setupSearchController()
-		fetchSources()
-		loaderAlert = presentLoader()
-	}
+    super.viewDidLoad()
+    setupViews()
+    setupSearchController()
+    fetchSources()
+    
+    let loadingIndicator = CircularProgressView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+    loadingIndicator.center = view.center
+    view.addSubview(loadingIndicator)
+}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -668,24 +671,3 @@ extension LibraryViewController: UISearchControllerDelegate, UISearchBarDelegate
 		return searchController.searchBar.text?.isEmpty ?? true
 	}
 }
-
-/// https://stackoverflow.com/a/75310581
-func presentLoader() -> UIAlertController {
-	let alert = UIAlertController(title: nil, message: "unyil", preferredStyle: .alert)
-	let activityIndicator = UIActivityIndicatorView(style: .large)
-	activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-	activityIndicator.isUserInteractionEnabled = false
-	activityIndicator.startAnimating()
-
-	alert.view.addSubview(activityIndicator)
-	
-	NSLayoutConstraint.activate([
-		alert.view.heightAnchor.constraint(equalToConstant: 95),
-		alert.view.widthAnchor.constraint(equalToConstant: 95),
-		activityIndicator.centerXAnchor.constraint(equalTo: alert.view.centerXAnchor),
-		activityIndicator.centerYAnchor.constraint(equalTo: alert.view.centerYAnchor)
-	])
-	
-	return alert
-}
-
