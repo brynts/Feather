@@ -18,7 +18,7 @@ var downloadTaskManager = DownloadTaskManager.shared
 class AppDelegate: UIResponder, UIApplicationDelegate, UIOnboardingViewControllerDelegate {
     static let isSideloaded = Bundle.main.bundleIdentifier != "kh.crysalis.feather"
     var window: UIWindow?
-    var loaderAlert = presentLoader()
+    var loadingIndicator: CircularProgressView?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let userDefaults = UserDefaults.standard
