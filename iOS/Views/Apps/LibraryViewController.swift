@@ -671,7 +671,7 @@ extension LibraryViewController: UISearchControllerDelegate, UISearchBarDelegate
 
 /// https://stackoverflow.com/a/75310581
 func presentLoader() -> UIAlertController {
-	let alert = UIAlertController(title: nil, message: "", preferredStyle: .alert)
+	let alert = UIAlertController(title: nil, message: "unyil", preferredStyle: .alert)
 	let activityIndicator = UIActivityIndicatorView(style: .large)
 	activityIndicator.translatesAutoresizingMaskIntoConstraints = false
 	activityIndicator.isUserInteractionEnabled = false
