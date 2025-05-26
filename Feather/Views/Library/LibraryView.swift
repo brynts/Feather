@@ -138,7 +138,7 @@ struct LibraryView: View {
 						guard let selectedFileURL = urls.first else { return }
 						let id = "FeatherManualDownload_\(UUID().uuidString)"
 						let dl = downloadManager.startArchive(from: selectedFileURL, id: id)
-						try? downloadManager.handlePachageFile(url: selectedFileURL, dl: dl)
+						try? downloadManager.handlePackageFile(url: selectedFileURL, dl: dl)
 					}
 				)
 			}
