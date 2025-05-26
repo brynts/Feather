@@ -125,7 +125,7 @@ class DownloadManager: NSObject, ObservableObject {
 
 extension DownloadManager: URLSessionDownloadDelegate {
 	
-	func handlePachageFile(url: URL, dl: Download) throws {
+	func handlePackageFile(url: URL, dl: Download) throws {
 		FR.handlePackageFile(url, download: dl) { err in
 			if err != nil {
 				let generator = UINotificationFeedbackGenerator()
@@ -156,7 +156,7 @@ extension DownloadManager: URLSessionDownloadDelegate {
 			try FileManager.default.removeFileIfNeeded(at: destinationURL)
 			try FileManager.default.moveItem(at: location, to: destinationURL)
 			
-			try handlePachageFile(url: destinationURL, dl: download)
+			try handlePackageFile(url: destinationURL, dl: download)
 		} catch {
 			print("Error handling downloaded file: \(error.localizedDescription)")
 		}
