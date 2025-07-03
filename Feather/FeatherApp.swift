@@ -183,6 +183,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 		let directories: [URL] = [
 			fileManager.archives,
 			fileManager.certificates,
+            fileManager.dataDir,
 			fileManager.signed,
 			fileManager.unsigned
 		]

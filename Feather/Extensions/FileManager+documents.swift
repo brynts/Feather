@@ -8,14 +8,26 @@
 import Foundation.NSFileManager
 
 extension FileManager {
+    static func forceWrite(content: String, to path: URL) throws {
+        let data = Data(content.utf8)
+        let folder = path.deletingLastPathComponent()
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        try data.write(to: path, options: .atomic)
+    }
+    
+    /// Base path: Documents/Feather
+    private var featherDir: URL {
+        URL.documentsDirectory.appendingPathComponent("Feather")
+    }
+    
 	/// Gives apps Signed directory
 	var archives: URL {
-		URL.documentsDirectory.appendingPathComponent("Archives")
+        featherDir.appendingPathComponent("Archives")
 	}
 	
 	/// Gives apps Signed directory
 	var signed: URL {
-		URL.documentsDirectory.appendingPathComponent("Signed")
+        featherDir.appendingPathComponent("Signed")
 	}
 	
 	/// Gives apps Signed directory with a UUID appending path
@@ -25,7 +37,7 @@ extension FileManager {
 	
 	/// Gives apps Unsigned directory
 	var unsigned: URL {
-		URL.documentsDirectory.appendingPathComponent("Unsigned")
+        featherDir.appendingPathComponent("Unsigned")
 	}
 	
 	/// Gives apps Unsigned directory with a UUID appending path
@@ -35,10 +47,15 @@ extension FileManager {
 	
 	/// Gives apps Certificates directory
 	var certificates: URL {
-		URL.documentsDirectory.appendingPathComponent("Certificates")
+        featherDir.appendingPathComponent("Certificates")
 	}
 	/// Gives apps Certificates directory with a UUID appending path
 	func certificates(_ uuid: String) -> URL {
 		certificates.appendingPathComponent(uuid)
 	}
+    
+    /// Gives apps Data directory
+    var dataDir: URL {
+        featherDir.appendingPathComponent("Data")
+    }
 }
