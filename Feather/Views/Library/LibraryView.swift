@@ -16,6 +16,7 @@ struct LibraryView: View {
 	@State private var _selectedInfoAppPresenting: AnyApp?
 	@State private var _selectedSigningAppPresenting: AnyApp?
 	@State private var _selectedInstallAppPresenting: AnyApp?
+    @State private var _selectedDylibsAppPresenting: AnyApp?
 	@State private var _isImportingPresenting = false
 	@State private var _isDownloadingPresenting = false
 	@State private var _alertDownloadString: String = "" // for _isDownloadingPresenting
@@ -75,7 +76,8 @@ struct LibraryView: View {
 									app: app,
 									selectedInfoAppPresenting: $_selectedInfoAppPresenting,
 									selectedSigningAppPresenting: $_selectedSigningAppPresenting,
-									selectedInstallAppPresenting: $_selectedInstallAppPresenting
+									selectedInstallAppPresenting: $_selectedInstallAppPresenting,
+                                    selectedDylibsAppPresenting: $_selectedDylibsAppPresenting
 								)
 								.compatMatchedTransitionSource(id: app.uuid ?? "", ns: _namespace)
 							}
@@ -95,7 +97,8 @@ struct LibraryView: View {
 									app: app,
 									selectedInfoAppPresenting: $_selectedInfoAppPresenting,
 									selectedSigningAppPresenting: $_selectedSigningAppPresenting,
-									selectedInstallAppPresenting: $_selectedInstallAppPresenting
+                                    selectedInstallAppPresenting: $_selectedInstallAppPresenting,
+                                    selectedDylibsAppPresenting: $_selectedDylibsAppPresenting
 								)
 								.compatMatchedTransitionSource(id: app.uuid ?? "", ns: _namespace)
 							}
@@ -148,6 +151,13 @@ struct LibraryView: View {
 					.presentationDragIndicator(.visible)
 					.compatPresentationRadius(21)
 			}
+            .sheet(item: $_selectedDylibsAppPresenting) { app in
+                if let appPath = Storage.shared.getAppDirectory(for: app.base) {
+                    DylibsView(appPath: appPath)
+                } else {
+                    Text("Failed to load app directory.")
+                }
+            }
 			.fullScreenCover(item: $_selectedSigningAppPresenting) { app in
 				SigningView(app: app.base)
 					.compatNavigationTransition(id: app.base.uuid ?? "", ns: _namespace)

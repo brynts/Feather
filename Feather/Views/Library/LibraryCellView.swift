@@ -25,6 +25,7 @@ struct LibraryCellView: View {
 	@Binding var selectedInfoAppPresenting: AnyApp?
 	@Binding var selectedSigningAppPresenting: AnyApp?
 	@Binding var selectedInstallAppPresenting: AnyApp?
+    @Binding var selectedDylibsAppPresenting: AnyApp?
 	
 	// MARK: Body
 	var body: some View {
@@ -56,6 +57,8 @@ struct LibraryCellView: View {
 			Divider()
 			_contextActionsExtra(for: app)
 			Divider()
+            _showDylibsActions(for: app)
+            Divider()
 			_actions(for: app)
 		}
 	}
@@ -85,6 +88,13 @@ extension LibraryCellView {
 			selectedInfoAppPresenting = AnyApp(base: app)
 		}
 	}
+    
+    @ViewBuilder
+    private func _showDylibsActions(for app: AppInfoPresentable) -> some View {
+        Button(.localized("Show Dylibs"), systemImage: "hammer") {
+            selectedDylibsAppPresenting = AnyApp(base: app)
+        }
+    }
 	
 	@ViewBuilder
 	private func _contextActionsExtra(for app: AppInfoPresentable) -> some View {

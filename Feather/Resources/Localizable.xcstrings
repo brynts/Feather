@@ -1096,6 +1096,9 @@
         }
       }
     },
+    "APPEXS" : {
+
+    },
     "AppID Name" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1399,6 +1402,9 @@
           }
         }
       }
+    },
+    "BUNDLES" : {
+
     },
     "By default, localized titles for the app won't be changed, however this option overrides it." : {
       "extractionState" : "manual",
@@ -2850,6 +2856,9 @@
       },
       "shouldTranslate" : false
     },
+    "DYLIBS" : {
+
+    },
     "Edit" : {
 
     },
@@ -3607,6 +3616,9 @@
       }
     },
     "Failed to import to Library: %@" : {
+
+    },
+    "Failed to load app directory." : {
 
     },
     "Failed to package IPA: %@" : {
