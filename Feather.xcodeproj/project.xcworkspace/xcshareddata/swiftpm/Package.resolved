@@ -1,5 +1,5 @@
 {
-  "originHash" : "450627c73b2287c0eb39869095b9173b3d338088c9e2d17b6c81f924863bdfa1",
+  "originHash" : "a705bcbc824424d5ad1448fa6d974343c05ea253d2be022851a0ce9a377ab9de",
   "pins" : [
     {
       "identity" : "apikit",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "b839e53b870104798035b279d2a6168b0a2227b1",
         "version" : "5.4.0"
+      }
+    },
+    {
+      "identity" : "ararchivekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/LebJe/ArArchiveKit.git",
+      "state" : {
+        "revision" : "ec33ce8bcb0be483e80ed49c95413e64e71e157b",
+        "version" : "0.3.0"
       }
     },
     {

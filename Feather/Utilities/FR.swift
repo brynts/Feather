@@ -138,9 +138,16 @@ enum FR {
 			switch result {
 			case .success(let pack):
 				do {
-					try FileManager.forceWrite(content: pack.key, to: "server.pem")
-					try FileManager.forceWrite(content: pack.cert, to: "server.crt")
-					try FileManager.forceWrite(content: pack.info.domains.commonName, to: "commonName.txt")
+                    let dataDir = FileManager.default.data
+                    
+                    let keyData = Data(pack.key.utf8)
+                    let certData = Data(pack.cert.utf8)
+                    let commonNameData = Data(pack.info.domains.commonName.utf8)
+                    
+                    try keyData.write(to: dataDir.appendingPathComponent("server.pem"), options: .atomic)
+                    try certData.write(to: dataDir.appendingPathComponent("server.crt"), options: .atomic)
+                    try commonNameData.write(to: dataDir.appendingPathComponent("commonName.txt"), options: .atomic)
+                    
 					generator.notificationOccurred(.success)
 					completion(true)
 				} catch {

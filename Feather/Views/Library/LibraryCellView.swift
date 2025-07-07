@@ -25,6 +25,8 @@ struct LibraryCellView: View {
 	@Binding var selectedInfoAppPresenting: AnyApp?
 	@Binding var selectedSigningAppPresenting: AnyApp?
 	@Binding var selectedInstallAppPresenting: AnyApp?
+    
+    var selectedDylibsAppPresenting: Binding<AnyApp?>? = nil
 	
 	// MARK: Body
 	var body: some View {
@@ -110,6 +112,11 @@ extension LibraryCellView {
 			Button(.localized("Sign"), systemImage: "signature") {
 				selectedSigningAppPresenting = AnyApp(base: app)
 			}
+            if selectedDylibsAppPresenting != nil {
+                Button("Show Dylibs", systemImage: "hammer") {
+                    selectedDylibsAppPresenting?.wrappedValue = AnyApp(base: app)
+                }
+            }
 		}
 	}
 	

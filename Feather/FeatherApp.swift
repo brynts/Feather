@@ -130,12 +130,38 @@ struct FeatherApp: App {
 			}
 		} else {
 			if url.pathExtension == "ipa" || url.pathExtension == "tipa" {
-				if FileManager.default.isFileFromFileProvider(at: url) {
-					guard url.startAccessingSecurityScopedResource() else { return }
-					FR.handlePackageFile(url) { _ in }
-				} else {
-					FR.handlePackageFile(url) { _ in }
-				}
+                let isSecurityScoped = url.startAccessingSecurityScopedResource()
+                defer {
+                    if isSecurityScoped {
+                        url.stopAccessingSecurityScopedResource()
+                    }
+                }
+                
+                let fileName = url.lastPathComponent
+                let destinationURL = URL.documentsDirectory.appendingPathComponent(fileName)
+
+                do {
+                    if FileManager.default.fileExists(atPath: destinationURL.path) {
+                        try FileManager.default.removeItem(at: destinationURL)
+                    }
+                    try FileManager.default.copyItem(at: url, to: destinationURL)
+                    
+                    DispatchQueue.main.async {
+                        UIAlertController.showAlertWithOk(
+                            title: .localized("File Saved"),
+                            message: String(format: .localized("'%@' has been saved to your File Manager."), fileName)
+                        )
+                    }
+                } catch {
+                    // Tampilkan pesan error jika gagal menyalin
+                    print("Error copying imported file: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        UIAlertController.showAlertWithOk(
+                            title: .localized("Error"),
+                            message: error.localizedDescription
+                        )
+                    }
+                }
 				
 				return
 			}
@@ -183,6 +209,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 		let directories: [URL] = [
 			fileManager.archives,
 			fileManager.certificates,
+            fileManager.data,
 			fileManager.signed,
 			fileManager.unsigned
 		]

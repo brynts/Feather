@@ -420,6 +420,9 @@
         }
       }
     },
+    "•" : {
+
+    },
     "💜 This couldn't of been done without my sponsors!" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -543,6 +546,9 @@
           }
         }
       }
+    },
+    "Actions..." : {
+
     },
     "Add" : {
       "extractionState" : "manual",
@@ -975,6 +981,9 @@
         }
       }
     },
+    "An unknown error occurred" : {
+
+    },
     "App Features" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1087,6 +1096,9 @@
         }
       }
     },
+    "APPEXS" : {
+
+    },
     "AppID Name" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1180,6 +1192,9 @@
           }
         }
       }
+    },
+    "Back" : {
+
     },
     "Bad Password" : {
       "comment" : "Bad certificate password",
@@ -1387,6 +1402,9 @@
           }
         }
       }
+    },
+    "BUNDLES" : {
+
     },
     "By default, localized titles for the app won't be changed, however this option overrides it." : {
       "extractionState" : "manual",
@@ -1670,6 +1688,9 @@
           }
         }
       }
+    },
+    "Choose an action" : {
+
     },
     "Choose from Files" : {
       "comment" : "Select custom app icon from files",
@@ -2013,6 +2034,9 @@
           }
         }
       }
+    },
+    "Create" : {
+
     },
     "Credits" : {
       "extractionState" : "manual",
@@ -2449,6 +2473,9 @@
         }
       }
     },
+    "Deselect All" : {
+
+    },
     "Discord" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2745,6 +2772,9 @@
         }
       }
     },
+    "Done" : {
+
+    },
     "Download StosVPN" : {
       "comment" : "Don't translate StosVPN, this is for linking the download to the required VPN for idevice",
       "extractionState" : "manual",
@@ -2834,6 +2864,18 @@
         }
       },
       "shouldTranslate" : false
+    },
+    "DYLIBS" : {
+
+    },
+    "Edit" : {
+
+    },
+    "Edit as Property List" : {
+
+    },
+    "Edit Text" : {
+
     },
     "Enable Liquid Glass" : {
       "extractionState" : "manual",
@@ -2941,6 +2983,15 @@
         }
       }
     },
+    "Enter a name for the new file. Include the extension (e.g., file.txt)." : {
+
+    },
+    "Enter a name for the new folder" : {
+
+    },
+    "Enter a new name" : {
+
+    },
     "Enter a URL to start validation." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2987,6 +3038,9 @@
           }
         }
       }
+    },
+    "Enter Certificate Password" : {
+
     },
     "Enter Password" : {
       "extractionState" : "manual",
@@ -3147,6 +3201,9 @@
         }
       }
     },
+    "Enter the password for the certificate. Leave it blank if no password is required." : {
+
+    },
     "Entitlements" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3222,6 +3279,15 @@
           }
         }
       }
+    },
+    "Error extracting archive: %@" : {
+
+    },
+    "Error: App has no UUID." : {
+
+    },
+    "Error: Could not find app bundle." : {
+
     },
     "Executable" : {
       "extractionState" : "manual",
@@ -3523,6 +3589,12 @@
         }
       }
     },
+    "Extract" : {
+
+    },
+    "Extracting %lld%%" : {
+
+    },
     "Failed to download, check your internet connection and try again." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3645,6 +3717,12 @@
           }
         }
       }
+    },
+    "File extracted successfully" : {
+
+    },
+    "File name" : {
+
     },
     "File Sharing" : {
       "comment" : "If app should have file sharing",
@@ -3793,6 +3871,9 @@
           }
         }
       }
+    },
+    "Folder name" : {
+
     },
     "Force Localize" : {
       "extractionState" : "manual",
@@ -4440,6 +4521,9 @@
         }
       }
     },
+    "Hex Editor" : {
+
+    },
     "Hidden" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4765,6 +4849,9 @@
         }
       }
     },
+    "Import Certificate" : {
+
+    },
     "Import Certificate File" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4811,6 +4898,12 @@
           }
         }
       }
+    },
+    "Import Files" : {
+
+    },
+    "Import files using the + button above" : {
+
     },
     "Import from Files" : {
       "comment" : "Select an app from files to import",
@@ -5001,6 +5094,9 @@
           }
         }
       }
+    },
+    "Import to Library" : {
+
     },
     "Imported" : {
       "extractionState" : "manual",
@@ -5573,6 +5669,9 @@
         }
       }
     },
+    "Loading File..." : {
+
+    },
     "Minimum Requirement" : {
       "comment" : "Minimum app version",
       "extractionState" : "manual",
@@ -5714,6 +5813,9 @@
           }
         }
       }
+    },
+    "Move" : {
+
     },
     "Name" : {
       "extractionState" : "manual",
@@ -5886,6 +5988,12 @@
         }
       }
     },
+    "New File" : {
+
+    },
+    "New Folder" : {
+
+    },
     "Nickname (Optional)" : {
       "comment" : "Certificate custom nickname",
       "extractionState" : "manual",
@@ -6038,6 +6146,9 @@
           }
         }
       }
+    },
+    "No file selected" : {
+
     },
     "No files chosen." : {
       "extractionState" : "manual",
@@ -6631,6 +6742,9 @@
         }
       }
     },
+    "Package as IPA" : {
+
+    },
     "Packaging" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6771,6 +6885,9 @@
           }
         }
       }
+    },
+    "Password (leave empty if none)" : {
+
     },
     "Platform" : {
       "extractionState" : "manual",
@@ -6932,6 +7049,9 @@
         }
       }
     },
+    "Plist Editor" : {
+
+    },
     "Post Signing" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -7013,6 +7133,9 @@
           }
         }
       }
+    },
+    "Preview" : {
+
     },
     "Previous Versions" : {
       "comment" : "Repository app previous versions",
@@ -7703,6 +7826,12 @@
         }
       }
     },
+    "Rename" : {
+
+    },
+    "Rename File" : {
+
+    },
     "Replace Substrate with ElleKit" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -8340,6 +8469,9 @@
         }
       }
     },
+    "Search files" : {
+
+    },
     "See all apps from your sources" : {
       "comment" : "All repositories description",
       "extractionState" : "manual",
@@ -8435,6 +8567,12 @@
         }
       }
     },
+    "Select" : {
+
+    },
+    "Select All" : {
+
+    },
     "Select Alternative Icon" : {
       "comment" : "Select custom alternative app icon",
       "extractionState" : "manual",
@@ -8482,6 +8620,9 @@
           }
         }
       }
+    },
+    "Select Destination" : {
+
     },
     "Select entitlements file" : {
       "comment" : "Select custom entitlements for the app",
@@ -8829,6 +8970,12 @@
           }
         }
       }
+    },
+    "Share" : {
+
+    },
+    "Show Dylibs" : {
+
     },
     "Show Sheet when Exporting" : {
       "comment" : "Archiving opens share sheet",
@@ -9708,6 +9855,9 @@
         }
       }
     },
+    "Success" : {
+
+    },
     "Supports importing from KravaSign/MapleSign and ESign." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10057,6 +10207,9 @@
           }
         }
       }
+    },
+    "This folder is empty" : {
+
     },
     "This option force converts apps to try to use the new liquid glass redesign iOS 26 introduced, this may not work for all applications due to differing frameworks." : {
       "extractionState" : "manual",
