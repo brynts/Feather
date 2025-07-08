@@ -122,14 +122,11 @@ struct FeatherApp: App {
 				FR.handleSource(fullPath) { }
 			}
 			/// feather://install/<url.ipa>
-			if
-				let fullPath = url.validatedScheme(after: "/install/"),
-				let downloadURL = URL(string: fullPath)
-			{
-				_ = DownloadManager.shared.startDownload(from: downloadURL)
-			}
-		} else {
-			if url.pathExtension == "ipa" || url.pathExtension == "tipa" {
+            if let fullPath = url.validatedScheme(after: "/install/"), let downloadURL = URL(string: fullPath) {
+                _ = downloadManager.startDownload(from: downloadURL)
+            }
+        } else {
+            if url.pathExtension.lowercased() == "ipa" || url.pathExtension.lowercased() == "tipa" {
                 let isSecurityScoped = url.startAccessingSecurityScopedResource()
                 defer {
                     if isSecurityScoped {
@@ -150,7 +147,7 @@ struct FeatherApp: App {
                     
                     DispatchQueue.main.async {
                         UIAlertController.showAlertWithOk(
-                            title: .localized("File Saved"),
+                            title: .localized("File Imported"),
                             message: String(format: .localized("'%@' has been saved to your File Manager."), fileName)
                         )
                     }

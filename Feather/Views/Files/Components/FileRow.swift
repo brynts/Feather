@@ -56,15 +56,19 @@ struct FileRow: View {
                     .lineLimit(1)
                 
                 HStack(spacing: 4) {
-                    Text(file.formattedSize)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    if let date = file.creationDate {
-                        Text("•")
+                    if !file.isDirectory {
+                        Text(file.formattedSize)
                             .font(.caption)
                             .foregroundColor(.secondary)
-                        Text(date, style: .date)
+                    }
+                    
+                    if let dateString = file.formattedDate {
+                        if !file.isDirectory {
+                            Text("•")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        Text(dateString)
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }

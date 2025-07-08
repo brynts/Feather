@@ -21,10 +21,16 @@ struct FileItem: Identifiable, Hashable {
     }
     
     var formattedSize: String {
+        guard !isDirectory else { return "" }
         let formatter = ByteCountFormatter()
         formatter.allowedUnits = [.useAll]
         formatter.countStyle = .file
         return formatter.string(fromByteCount: size)
+    }
+    
+    var formattedDate: String? {
+        guard let date = creationDate else { return nil }
+        return date.formatted(date: .abbreviated, time: .shortened)
     }
     
     var isArchive: Bool {
