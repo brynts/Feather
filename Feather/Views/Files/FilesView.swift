@@ -200,7 +200,7 @@ struct FilesView: View {
         }
         .alert(isPresented: $viewModel.showingError) {
             Alert(
-                title: Text(String(localized: "Error")),
+                title: Text(String(localized: "Success")),
                 message: Text(viewModel.error ?? String(localized: "An unknown error occurred")),
                 dismissButton: .default(Text(String(localized: "OK")))
             )
