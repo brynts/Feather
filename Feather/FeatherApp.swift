@@ -146,6 +146,8 @@ struct FeatherApp: App {
                     }
                     try FileManager.default.copyItem(at: url, to: destinationURL)
                     
+                    try? FileManager.default.removeItem(at: url)
+                    
                     DispatchQueue.main.async {
                         UIAlertController.showAlertWithOk(
                             title: .localized("File Saved"),
@@ -153,7 +155,6 @@ struct FeatherApp: App {
                         )
                     }
                 } catch {
-                    // Tampilkan pesan error jika gagal menyalin
                     print("Error copying imported file: \(error.localizedDescription)")
                     DispatchQueue.main.async {
                         UIAlertController.showAlertWithOk(

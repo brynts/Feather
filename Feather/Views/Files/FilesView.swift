@@ -48,10 +48,17 @@ struct FilesView: View {
     }
     
     private var filteredFiles: [FileItem] {
+        let filesToDisplay = viewModel.files.filter { fileItem in
+            if isRootView {
+                return fileItem.name.lowercased() != "inbox"
+            }
+            return true
+        }
+            
         if searchText.isEmpty {
-            return viewModel.files
+            return filesToDisplay
         } else {
-            return viewModel.files.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+            return filesToDisplay.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         }
     }
     
@@ -193,7 +200,7 @@ struct FilesView: View {
         }
         .alert(isPresented: $viewModel.showingError) {
             Alert(
-                title: Text(String(localized: "Success")),
+                title: Text(String(localized: "Error")),
                 message: Text(viewModel.error ?? String(localized: "An unknown error occurred")),
                 dismissButton: .default(Text(String(localized: "OK")))
             )
@@ -457,7 +464,6 @@ struct FilesView: View {
         } label: {
             Image(systemName: "trash")
         }
-        .tint(.red)
         .disabled(viewModel.selectedItems.isEmpty)
     }
     
@@ -627,8 +633,6 @@ struct FilesView: View {
     }
     
     private func importIpaToLibrary(_ file: FileItem) {
-        isExtracting = true
-        extractionProgress = 0.0
         
         DispatchQueue.global(qos: .userInitiated).async {
             do {
@@ -636,17 +640,8 @@ struct FilesView: View {
                 
                 let download = self.downloadManager.startArchive(from: file.url, id: id)
                 
-                DispatchQueue.main.async {
-                    self.extractionProgress = 0.3
-                }
-                
                 try self.downloadManager.handlePachageFile(url: file.url, dl: download)
                 
-                DispatchQueue.main.async {
-                    self.isExtracting = false
-                    self.viewModel.error = "Successfully imported \(file.name) to Library"
-                    self.viewModel.showingError = true
-                }
             } catch {
                 DispatchQueue.main.async {
                     self.isExtracting = false

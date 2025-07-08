@@ -73,7 +73,9 @@ class DownloadManager: NSObject, ObservableObject {
         download.task = task
         task.resume()
         
-        downloads.append(download)
+        DispatchQueue.main.async {
+            self.downloads.append(download)
+        }
         return download
     }
 	
@@ -82,7 +84,9 @@ class DownloadManager: NSObject, ObservableObject {
 		id: String = UUID().uuidString
 	) -> Download {
 		let download = Download(id: id, url: url, onlyArchiving: true)
-		downloads.append(download)
+        DispatchQueue.main.async {
+            self.downloads.append(download)
+        }
 		return download
 	}
     
@@ -101,8 +105,10 @@ class DownloadManager: NSObject, ObservableObject {
     func cancelDownload(_ download: Download) {
         download.task?.cancel()
         
-        if let index = downloads.firstIndex(where: { $0.id == download.id }) {
-            downloads.remove(at: index)
+        DispatchQueue.main.async {
+            if let index = self.downloads.firstIndex(where: { $0.id == download.id }) {
+                self.downloads.remove(at: index)
+            }
         }
     }
     
