@@ -1356,6 +1356,17 @@
         }
       }
     },
+    "Bug Report" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bug Report"
+          }
+        }
+      }
+    },
     "Bundle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6742,8 +6753,16 @@
         }
       }
     },
-    "Package as IPA" : {
-
+    "Other" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other"
+          }
+        }
+      }
     },
     "Packaging" : {
       "extractionState" : "manual",
