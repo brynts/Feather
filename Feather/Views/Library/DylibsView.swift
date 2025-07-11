@@ -22,10 +22,6 @@ struct DylibsView: View {
     @State private var alertTitle = ""
     @State private var alertMessage = ""
     
-    @State private var isDylibsExpanded = false
-    @State private var isBundlesExpanded = false
-    @State private var isAppexsExpanded = false
-    
     var body: some View {
         NBNavigationView(.localized("Tweak Picker")) {
             VStack {
@@ -75,50 +71,41 @@ struct DylibsView: View {
                 } else {
                     List {
                         if !dylibs.isEmpty {
-                            DisclosureGroup(isExpanded: $isDylibsExpanded) {
+                            Section(header: Text("DYLIBS").font(.headline).foregroundColor(.secondary)) {
                                 ForEach(dylibs, id: \.self) { fileURL in
                                     DylibRowView(
                                         fileURL: fileURL,
                                         isSelected: selectedDylibs.contains(fileURL),
                                         toggleSelection: { toggleDylibSelection(fileURL) }
                                     )
+                                    .listRowInsets(EdgeInsets())
                                 }
-                            } label: {
-                                Text("DYLIBS")
-                                    .font(.headline)
-                                    .foregroundColor(.secondary)
                             }
                         }
 
                         if !bundles.isEmpty {
-                            DisclosureGroup(isExpanded: $isBundlesExpanded) {
+                            Section(header: Text("BUNDLES").font(.headline).foregroundColor(.secondary)) {
                                 ForEach(bundles, id: \.self) { fileURL in
                                     DylibRowView(
                                         fileURL: fileURL,
                                         isSelected: selectedDylibs.contains(fileURL),
                                         toggleSelection: { toggleDylibSelection(fileURL) }
                                     )
+                                    .listRowInsets(EdgeInsets())
                                 }
-                            } label: {
-                                Text("BUNDLES")
-                                    .font(.headline)
-                                    .foregroundColor(.secondary)
                             }
                         }
 
                         if !appexs.isEmpty {
-                            DisclosureGroup(isExpanded: $isAppexsExpanded) {
+                            Section(header: Text("APPEXS").font(.headline).foregroundColor(.secondary)) {
                                 ForEach(appexs, id: \.self) { fileURL in
                                     DylibRowView(
                                         fileURL: fileURL,
                                         isSelected: selectedDylibs.contains(fileURL),
                                         toggleSelection: { toggleDylibSelection(fileURL) }
                                     )
+                                    .listRowInsets(EdgeInsets())
                                 }
-                            } label: {
-                                Text("APPEXS")
-                                    .font(.headline)
-                                    .foregroundColor(.secondary)
                             }
                         }
                     }
@@ -241,12 +228,19 @@ struct DylibRowView: View {
     
     var body: some View {
         HStack {
-            Image(systemName: fileURL.pathExtension.lowercased() == "framework" ? "shippingbox" : "doc.circle")
-                .foregroundColor(.accentColor)
+            if isSelected {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundColor(.accentColor)
+            } else {
+                Image(systemName: "circle")
+                    .foregroundColor(.secondary)
+            }
             
             VStack(alignment: .leading) {
                 Text(fileURL.lastPathComponent)
-                    .font(.body)
+                    .font(.subheadline)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
                 
                 Text(fileURL.pathExtension.uppercased())
                     .font(.caption)
@@ -255,11 +249,8 @@ struct DylibRowView: View {
             
             Spacer()
             
-            if isSelected {
-                Image(systemName: "checkmark")
-                    .foregroundColor(.accentColor)
-            }
         }
+        .padding(.horizontal)
         .contentShape(Rectangle())
         .onTapGesture {
             toggleSelection()
