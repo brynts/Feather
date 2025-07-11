@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "ararchivekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/LebJe/ArArchiveKit.git",
+      "state" : {
+        "revision" : "ec33ce8bcb0be483e80ed49c95413e64e71e157b",
+        "version" : "0.3.0"
+      }
+    },
+    {
       "identity" : "async-http-client",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-server/async-http-client.git",
