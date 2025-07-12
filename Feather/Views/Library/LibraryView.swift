@@ -253,10 +253,8 @@ extension LibraryView {
                 Button(.localized("Sign"), systemImage: "signature") {
                     _selectedSigningAppPresenting = AnyApp(base: app)
                 }
-                if _selectedDylibsAppPresenting != nil {
-                     Button("Show Dylibs", systemImage: "hammer") {
-                        _selectedDylibsAppPresenting = AnyApp(base: app)
-                    }
+                Button("Show Dylibs", systemImage: "hammer") {
+                    _selectedDylibsAppPresenting = AnyApp(base: app)
                 }
             }
             
