@@ -22,21 +22,15 @@ struct AppearanceView: View {
 		(.localized("Big Description"), .localized("Adds the localized description of the app."))
 	]
 	
+    @AppStorage("Feather.libraryLayoutStyle")
+    private var libraryLayoutStyle: LibraryLayoutStyle.RawValue = LibraryLayoutStyle.vertical.rawValue
+    
 	@AppStorage("com.apple.SwiftUI.IgnoreSolariumLinkedOnCheck")
 	private var _ignoreSolariumLinkedOnCheck: Bool = false
 	
 	// MARK: Body
     var body: some View {
 		NBList(.localized("Appearance")) {
-			Section {
-				Picker(.localized("Appearance"), selection: $_userIntefacerStyle) {
-					ForEach(UIUserInterfaceStyle.allCases.sorted(by: { $0.rawValue < $1.rawValue }), id: \.rawValue) { style in
-						Text(style.label).tag(style.rawValue)
-					}
-				}
-				.pickerStyle(.segmented)
-			}
-			
 			NBSection(.localized("Theme")) {
 				AppearanceTintColorView()
 					.listRowInsets(EdgeInsets())
@@ -58,6 +52,32 @@ struct AppearanceView: View {
 				.labelsHidden()
 				.pickerStyle(.inline)
 			}
+            
+            NBSection(.localized("Miscellaneous")) {
+                HStack {
+                    Text("Dark Mode")
+                    Spacer()
+                    Picker("Appearance", selection: $_userIntefacerStyle) {
+                        ForEach(UIUserInterfaceStyle.allCases.sorted(by: { $0.rawValue < $1.rawValue }), id: \.rawValue) { style in
+                            Text(style.label).tag(style.rawValue)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .fixedSize()
+                }
+                
+                HStack {
+                    Text("Library View")
+                    Spacer()
+                    Picker("Library View", selection: $libraryLayoutStyle) {
+                        ForEach(LibraryLayoutStyle.allCases, id: \.rawValue) { style in
+                            Text(style.displayName).tag(style.rawValue)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .fixedSize() // Mencegah picker meregang penuh
+                }
+            }
 			
 			if #available(iOS 19.0, *) {
 				NBSection(.localized("Experiments")) {

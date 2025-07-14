@@ -13,22 +13,27 @@ import NimbleViews
 struct LibraryView: View {
     @StateObject var downloadManager = DownloadManager.shared
     
+    // MARK: State
     @State private var _selectedInfoAppPresenting: AnyApp?
     @State private var _selectedSigningAppPresenting: AnyApp?
     @State private var _selectedInstallAppPresenting: AnyApp?
     @State private var _selectedDylibsAppPresenting: AnyApp?
     @State private var _isImportingPresenting = false
     @State private var _isDownloadingPresenting = false
-    @State private var _alertDownloadString: String = "" // for _isDownloadingPresenting
+    @State private var _alertDownloadString: String = ""
     
     @State private var _searchText = ""
+    @State private var _selectedAppForActionSheet: AnyApp?
+
+    @State private var selectedTab: LibraryTab = .imported
+    
     @State private var _selectedScope: Scope = .all
     
-    @State private var _selectedAppForActionSheet: AnyApp?
+    @AppStorage("Feather.libraryLayoutStyle")
+    private var libraryLayoutStyle: LibraryLayoutStyle.RawValue = LibraryLayoutStyle.vertical.rawValue
 
     @Namespace private var _namespace
     
-    // horror
     private func filteredAndSortedApps<T>(from apps: FetchedResults<T>) -> [T] where T: NSManagedObject {
         apps.filter {
             _searchText.isEmpty ||
@@ -44,7 +49,7 @@ struct LibraryView: View {
         filteredAndSortedApps(from: _importedApps)
     }
     
-    // MARK: Fetch
+    // MARK: Fetch Requests
     @FetchRequest(
         entity: Signed.entity(),
         sortDescriptors: [NSSortDescriptor(keyPath: \Signed.date, ascending: false)],
@@ -57,35 +62,19 @@ struct LibraryView: View {
         animation: .snappy
     ) private var _importedApps: FetchedResults<Imported>
     
+    enum LibraryTab: String, CaseIterable {
+        case imported = "Imported"
+        case signed = "Signed"
+    }
+    
     // MARK: Body
     var body: some View {
         NBNavigationView(.localized("Library")) {
-            _listContent
-            .searchable(text: $_searchText, placement: .platform())
-            .compatSearchScopes($_selectedScope) {
-                ForEach(Scope.allCases, id: \.displayName) { scope in
-                    Text(scope.displayName).tag(scope)
-                }
-            }
-            .scrollDismissesKeyboard(.interactively)
-            .overlay {
-                if
-                    _filteredSignedApps.isEmpty,
-                    _filteredImportedApps.isEmpty
-                {
-                    if #available(iOS 17, *) {
-                        ContentUnavailableView {
-                            Label(.localized("No Apps"), systemImage: "questionmark.app.fill")
-                        } description: {
-                            Text(.localized("Get started by importing your first IPA file."))
-                        } actions: {
-                            Menu {
-                                _importActions()
-                            } label: {
-                                NBButton(.localized("Import"), style: .text)
-                            }
-                        }
-                    }
+            Group {
+                if LibraryLayoutStyle(rawValue: libraryLayoutStyle) == .horizontal {
+                    horizontalBody
+                } else {
+                    verticalBody
                 }
             }
             .toolbar {
@@ -113,9 +102,7 @@ struct LibraryView: View {
                     if let contents = try? FileManager.default.contentsOfDirectory(at: unsignedBaseURL, includingPropertiesForKeys: nil, options: []),
                        let appBundleURL = contents.first(where: { $0.pathExtension == "app" }) {
                         DylibsView(appPath: appBundleURL)
-                    }
-
-                    else {
+                    } else {
                         Text("Error: Could not find app bundle.")
                     }
                 } else {
@@ -167,58 +154,176 @@ struct LibraryView: View {
         }
     }
     
+    // MARK: - Horizontal Layout Body
     @ViewBuilder
-    private var _listContent: some View {
+    private var horizontalBody: some View {
+        VStack {
+            Picker("Pilih kategori", selection: $selectedTab) {
+                ForEach(LibraryTab.allCases, id: \.self) { tab in
+                    Text(tab.rawValue).tag(tab)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+            
+            if selectedTab == .imported {
+                if _filteredImportedApps.isEmpty {
+                    if !_searchText.isEmpty {
+                        noSearchResultsView
+                    } else {
+                        importedEmptyStateView
+                    }
+                } else {
+                    list(for: _filteredImportedApps)
+                }
+            } else {
+                if _filteredSignedApps.isEmpty {
+                    if !_searchText.isEmpty {
+                        noSearchResultsView
+                    } else {
+                        signedEmptyStateView
+                    }
+                } else {
+                    list(for: _filteredSignedApps)
+                }
+            }
+        }
+        .searchable(text: $_searchText, placement: .navigationBarDrawer)
+        .scrollDismissesKeyboard(.interactively)
+    }
+    
+    // MARK: - Vertical Layout Body (Original)
+    @ViewBuilder
+    private var verticalBody: some View {
         NBListAdaptable {
-            if
-                !_filteredSignedApps.isEmpty ||
-                !_filteredImportedApps.isEmpty
-            {
-                if
-                    _selectedScope == .all ||
-                    _selectedScope == .signed
-                {
-                    NBSection(
-                        .localized("Signed"),
-                        secondary: _filteredSignedApps.count.description
-                    ) {
+            if !_filteredSignedApps.isEmpty || !_filteredImportedApps.isEmpty {
+                if _selectedScope == .all || _selectedScope == .signed {
+                    NBSection(.localized("Signed"), secondary: _filteredSignedApps.count.description) {
                         ForEach(_filteredSignedApps, id: \.uuid) { app in
-                            LibraryCellView(
-                                app: app,
-                                selectedInfoAppPresenting: $_selectedInfoAppPresenting,
-                                selectedSigningAppPresenting: $_selectedSigningAppPresenting,
-                                selectedInstallAppPresenting: $_selectedInstallAppPresenting,
-                                selectedDylibsAppPresenting: $_selectedDylibsAppPresenting,
-                                selectedAppForActionSheet: $_selectedAppForActionSheet
-                            )
-                            .compatMatchedTransitionSource(id: app.uuid ?? "", ns: _namespace)
+                            cell(for: app)
                         }
                     }
                 }
                 
-                if
-                    _selectedScope == .all ||
-                        _selectedScope == .imported
-                {
-                    NBSection(
-                        .localized("Imported"),
-                        secondary: _filteredImportedApps.count.description
-                    ) {
+                if _selectedScope == .all || _selectedScope == .imported {
+                    NBSection(.localized("Imported"), secondary: _filteredImportedApps.count.description) {
                         ForEach(_filteredImportedApps, id: \.uuid) { app in
-                            LibraryCellView(
-                                app: app,
-                                selectedInfoAppPresenting: $_selectedInfoAppPresenting,
-                                selectedSigningAppPresenting: $_selectedSigningAppPresenting,
-                                selectedInstallAppPresenting: $_selectedInstallAppPresenting,
-                                selectedDylibsAppPresenting: $_selectedDylibsAppPresenting,
-                                selectedAppForActionSheet: $_selectedAppForActionSheet
-                            )
-                            .compatMatchedTransitionSource(id: app.uuid ?? "", ns: _namespace)
+                            cell(for: app)
                         }
                     }
                 }
             }
         }
+        .searchable(text: $_searchText, placement: .platform())
+        .compatSearchScopes($_selectedScope) {
+            ForEach(Scope.allCases, id: \.displayName) { scope in
+                Text(scope.displayName).tag(scope)
+            }
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .overlay {
+            if _signedApps.isEmpty && _importedApps.isEmpty {
+                importedEmptyStateView
+            }
+        }
+    }
+    
+    // MARK: - Reusable Components
+    
+    @ViewBuilder
+    private func list<T: AppInfoPresentable>(for apps: [T]) -> some View {
+        NBListAdaptable {
+            ForEach(apps, id: \.uuid) { app in
+                cell(for: app)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func cell<T: AppInfoPresentable>(for app: T) -> some View {
+        LibraryCellView(
+            app: app,
+            selectedInfoAppPresenting: $_selectedInfoAppPresenting,
+            selectedSigningAppPresenting: $_selectedSigningAppPresenting,
+            selectedInstallAppPresenting: $_selectedInstallAppPresenting,
+            selectedDylibsAppPresenting: $_selectedDylibsAppPresenting,
+            selectedAppForActionSheet: $_selectedAppForActionSheet
+        )
+        .compatMatchedTransitionSource(id: app.uuid ?? "", ns: _namespace)
+    }
+
+    @ViewBuilder
+    private var importedEmptyStateView: some View {
+        Spacer()
+        if #available(iOS 17, *) {
+            ContentUnavailableView {
+                Label(.localized("No Apps"), systemImage: "questionmark.app.fill")
+            } description: {
+                Text(.localized("Get started by importing your first IPA file."))
+            } actions: {
+                Menu {
+                    _importActions()
+                } label: {
+                    NBButton(.localized("Import"), style: .text)
+                }
+            }
+        } else {
+            VStack {
+                Label(.localized("No Apps"), systemImage: "questionmark.app.fill")
+                    .font(.title)
+                Text(.localized("Get started by importing your first IPA file."))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 4)
+                Menu {
+                    _importActions()
+                } label: {
+                    NBButton(.localized("Import"), style: .text)
+                        .padding(.top)
+                }
+            }
+        }
+        Spacer()
+    }
+    
+    @ViewBuilder
+    private var signedEmptyStateView: some View {
+        Spacer()
+        if #available(iOS 17, *) {
+            ContentUnavailableView {
+                Label(.localized("No Signed Apps"), systemImage: "signature")
+            } description: {
+                Text(.localized("Please sign your first IPA file."))
+            }
+        } else {
+            VStack {
+                Label(.localized("No Signed Apps"), systemImage: "signature")
+                    .font(.title)
+                Text(.localized("Please sign your first IPA file."))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 4)
+            }
+        }
+        Spacer()
+    }
+    
+    @ViewBuilder
+    private var noSearchResultsView: some View {
+        Spacer()
+        if #available(iOS 17, *) {
+            ContentUnavailableView.search(text: _searchText)
+        } else {
+            VStack {
+                Label(.localized("No Results"), systemImage: "magnifyingglass")
+                    .font(.title)
+                Text("No results for '\(_searchText)'")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 4)
+            }
+        }
+        Spacer()
     }
 }
 
@@ -296,3 +401,4 @@ extension LibraryView {
         }
     }
 }
+

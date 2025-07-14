@@ -2161,6 +2161,9 @@
         }
       }
     },
+    "Dark Mode" : {
+
+    },
     "Date" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5680,6 +5683,9 @@
         }
       }
     },
+    "Library View" : {
+
+    },
     "Loading File..." : {
 
     },
@@ -6330,6 +6336,9 @@
         }
       }
     },
+    "No results for '%@'" : {
+
+    },
     "None" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -6909,6 +6918,9 @@
       }
     },
     "Password (leave empty if none)" : {
+
+    },
+    "Pilih kategori" : {
 
     },
     "Platform" : {
