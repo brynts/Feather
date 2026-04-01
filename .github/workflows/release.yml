@@ -10,7 +10,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          submodules: 'true'
+          submodules: 'recursive'
+          persist-credentials: false
+
+      - name: Pull Git LFS assets for IDeviceKitten
+        run: |
+          git config --global --unset-all http.https://github.com/.extraheader || true
+          git -C IDeviceKitten config --unset-all http.https://github.com/.extraheader || true
+          git -C IDeviceKitten lfs pull
       
       - name: Use Xcode 26.2
         run: |
