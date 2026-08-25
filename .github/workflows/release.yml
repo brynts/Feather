@@ -6,41 +6,48 @@ on:
       - v*
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          submodules: 'true'
+          submodules: recursive
 
       - name: Select Xcode
         run: |
-          sudo xcode-select -s /Applications/Xcode_26.3.0.app
+          sudo xcode-select -s /Applications/Xcode_26.3.0.app || sudo xcode-select -s /Applications/Xcode.app
 
       - name: Compile Feather
-        run: | 
-          agvtool new-version -all $(git rev-parse HEAD)
+        run: |
+          agvtool new-version -all $(git rev-parse --short HEAD)
           make
-          mkdir upload
+          mkdir -p upload
           mv packages/* upload/
 
       - name: Extract Version
         id: get_version
         run: |
-          VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" _build/Payload/*.app/Info.plist)
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+          else
+            VERSION=$(git rev-parse --short HEAD)
+          fi
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "Using version: ${VERSION}"
 
-      - name: Create Release
+      - name: Create Draft Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Feather v${{ env.VERSION }}
+          name: Feather ${{ env.VERSION }}
           tag_name: v${{ env.VERSION }}
-          files: |
-            upload/*
+          files: upload/*
           generate_release_notes: true
           fail_on_unmatched_files: true
           draft: true
         env:
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
