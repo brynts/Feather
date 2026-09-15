@@ -5,11 +5,11 @@
 
 <div align="center">
 
-<img title="Feather" alt="Feather" height="180" src=".github/landing.png">
+<img title="Feather" alt="Feather" height="180" src="landing.png">
 
 Sideloading app meant for developer certificates.
 
-<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/demo-dark.png"><source media="(prefers-color-scheme: light)" srcset=".github/demo-light.png"><img alt="Feather" src=".github/demo-light.png"></picture></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="demo-dark.png"><source media="(prefers-color-scheme: light)" srcset="demo-light.png"><img alt="Feather" src="demo-light.png"></picture></p>
 
 
 </div>
