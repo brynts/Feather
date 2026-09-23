@@ -42,8 +42,25 @@ jobs:
       - name: Get Version
         id: get_version
         run: |
-          VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" _build/Payload/*.app/Info.plist)
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          set -e
+          PLIST=""
+          for p in _build/Payload/Feather.app/Info.plist _build/Payload/*.app/Info.plist; do
+            if [ -f "$p" ]; then PLIST="$p"; break; fi
+          done
+          VERSION=""
+          if [ -n "$PLIST" ]; then
+            VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$PLIST" 2>/dev/null || true)
+          fi
+          if [ -z "$VERSION" ]; then
+            VERSION=$(grep -E '^FEATHER_PROJECT_VERSION=' Feather.xcconfig | cut -d= -f2 | tr -d '[:space:]')
+          fi
+          if [ -z "$VERSION" ]; then
+            echo "Could not determine version"
+            ls -la _build/Payload/ 2>/dev/null || true
+            exit 1
+          fi
+          echo "VERSION=${VERSION}"
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
 
       - name: Create Release
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
