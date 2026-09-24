@@ -62,16 +62,7 @@ jobs:
           echo "VERSION=${VERSION}"
           echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
 
-      - name: Upload packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: Feather-${{ env.VERSION }}
-          path: packages/*
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Create Release
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+      - name: Create Draft Release
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v3.0.2
         with:
           name: Feather v${{ env.VERSION }}
@@ -82,4 +73,4 @@ jobs:
           fail_on_unmatched_files: true
           draft: true
         env:
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
