@@ -109,7 +109,7 @@ final class LocalServerManager {
 			serialNumber: X509.Certificate.SerialNumber(),
 			publicKey: key.publicKey,
 			notValidBefore: now,
-			notValidAfter: now.addingTimeInterval(60 * 60 * 24 * 365),
+			notValidAfter: now.addingTimeInterval(60 * 60 * 24 * 365 * 10),
 			issuer: name,
 			subject: name,
 			signatureAlgorithm: .ecdsaWithSHA256,
