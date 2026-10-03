@@ -23,7 +23,7 @@ final class LocalServerManager {
 		let serverPrivateKey = X509.Certificate.PrivateKey(P256.Signing.PrivateKey())
 		
 
-		let name = try! DistinguishedName {
+		let name = try DistinguishedName {
 			CommonName(Self.serverHostname)
 		}
 
@@ -62,11 +62,6 @@ final class LocalServerManager {
 		try Data(serverCertificate.serializeAsPEM().pemString.utf8).write(to: certificateURL, options: .atomic)
 		try Data(serverPrivateKey.serializeAsPEM().pemString.utf8).write(to: privateKeyURL, options: .atomic)
 		try Data(Self.serverHostname.utf8).write(to: URL.documentsDirectory.appendingPathComponent("commonName.txt"), options: .atomic)
-	}
-	
-	func exportRootCA() throws -> URL {
-		_ = try rootMaterial()
-		return URL.documentsDirectory.appendingPathComponent("FeatherLocalCA.cer")
 	}
 
 	private func rootMaterial() throws -> RootMaterialModel {
