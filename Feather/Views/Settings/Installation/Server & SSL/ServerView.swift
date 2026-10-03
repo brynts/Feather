@@ -52,9 +52,6 @@ struct ServerView: View {
 	@AppStorage("Feather.serverMethod") private var _serverMethod: Int = 0
 	private let _serverMethods: [String] = [.localized("Fully Local"), .localized("Semi Local")]
 	
-	private let _dataService = NBFetchService()
-	private let _serverPackUrl = "https://backloop.dev/pack.json"
-	
 	// MARK: Body
 	var body: some View {
 		Group {
@@ -69,25 +66,18 @@ struct ServerView: View {
 			}
 			
 			Section {
-				Button(.localized("Update SSL Certificates"), systemImage: "arrow.down.doc") {
-					FR.downloadSSLCertificates(from: _serverPackUrl) { success in
-						if success {
-							DispatchQueue.main.async {
-								UIAlertController.showAlertWithOk(
-									title: .localized("SSL Certificates"),
-									message: .localized("Certificates updated successfully.")
-								)
-							}
-						} else {
-							DispatchQueue.main.async {
-								UIAlertController.showAlertWithOk(
-									title: .localized("SSL Certificates"),
-									message: .localized("Failed to download, check your internet connection and try again.")
-								)
-							}
-						}
+				Button(.localized("Install Local CA"), systemImage: "folder") {
+					do {
+						try LocalServerManager.shared.createServerCert()
+						_ = try LocalServerManager.shared.exportRootCA()
+						UIApplication.open(URL.documentsDirectory.toSharedDocumentsURL()!)
+					} catch {
+						UIAlertController.showAlertWithOk(title: .localized("Error"), message: String(describing: error))
 					}
 				}
+				.disabled(_serverMethod != 0)
+			} footer: {
+				Text(.localized("Tap on the FeatherLocalCA.crt file to install the local CA, install it in settings then go to About > Certificate Trust Settings and enable full trust for the Feather Local Root CA."))
 			}
 		}
 	}
