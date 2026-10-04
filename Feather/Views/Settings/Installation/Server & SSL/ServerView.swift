@@ -68,7 +68,7 @@ struct ServerView: View {
 			Section {
 				Button(.localized("Install Local CA"), systemImage: "folder") {
 					do {
-						try LocalServerManager.shared.createServerCert()
+						try LocalServerManager.createServerCert()
 						UIApplication.open(URL.documentsDirectory.toSharedDocumentsURL()!)
 					} catch {
 						UIAlertController.showAlertWithOk(title: .localized("Error"), message: String(describing: error))

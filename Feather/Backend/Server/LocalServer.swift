@@ -1,5 +1,5 @@
 //
-//  LocalServerManager.swift
+//  LocalServer.swift
 //  Feather
 //
 //  Created by Nagata Asami on 17/9/26.
@@ -10,15 +10,10 @@ import Crypto
 import SwiftASN1
 import X509
 
-final class LocalServerManager {
-	static let shared = LocalServerManager()
+enum LocalServer {
 	static let serverHostname = "feather.localhost"
 
-	private let fileManager = FileManager.default
-	
-	private init() {}
-
-	func createServerCert() throws {
+	static func createServerCert() throws {
 		let root = try rootMaterial()
 		let serverPrivateKey = X509.Certificate.PrivateKey(P256.Signing.PrivateKey())
 		
@@ -64,11 +59,11 @@ final class LocalServerManager {
 		try Data(Self.serverHostname.utf8).write(to: URL.documentsDirectory.appendingPathComponent("commonName.txt"), options: .atomic)
 	}
 
-	private func rootMaterial() throws -> RootMaterialModel {
+	private static func rootMaterial() throws -> RootMaterialModel {
 		let rootPrivateKey = try createRootKey()
 		let certificateURL = URL.documentsDirectory.appendingPathComponent("FeatherLocalCA.cer")
 		
-		if fileManager.fileExists(atPath: certificateURL.path) {
+		if FileManager.default.fileExists(atPath: certificateURL.path) {
 			let der = try Data(contentsOf: certificateURL)
 			if let certificate = try? X509.Certificate(derEncoded: Array(der)),
 				certificate.publicKey == rootPrivateKey.publicKey {
@@ -84,7 +79,7 @@ final class LocalServerManager {
 		return RootMaterialModel(privateKey: rootPrivateKey, certificate: certificate, der: der)
 	}
 	
-	private func createRootCA(key: X509.Certificate.PrivateKey) throws -> X509.Certificate {
+	private static func createRootCA(key: X509.Certificate.PrivateKey) throws -> X509.Certificate {
 		let name = try DistinguishedName {
 			CommonName("Feather Local Root CA")
 		}
@@ -113,9 +108,9 @@ final class LocalServerManager {
 		)
 	}
 	
-	private func createRootKey() throws -> X509.Certificate.PrivateKey {
+	private static func createRootKey() throws -> X509.Certificate.PrivateKey {
 		let keyURL = URL.documentsDirectory.appendingPathComponent("root.key")
-		if fileManager.fileExists(atPath: keyURL.path) {
+		if FileManager.default.fileExists(atPath: keyURL.path) {
 			let key = try P256.Signing.PrivateKey(rawRepresentation: Data(contentsOf: keyURL))
 			return X509.Certificate.PrivateKey(key)
 		}
