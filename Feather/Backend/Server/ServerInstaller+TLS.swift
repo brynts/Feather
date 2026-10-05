@@ -51,7 +51,7 @@ extension ServerInstaller {
 				? (Self.getLocalAddress() ?? localhost)
 				: localhost
 		} else {
-			return readCommonName() ?? localhost
+			return LocalServer.serverHostname
 		}
 	}
 	
@@ -71,15 +71,6 @@ extension ServerInstaller {
 				try NIOSSLPrivateKey(file: pem.path, format: .pem)
 			)
 		)
-	}
-	
-	func readCommonName() -> String? {
-		guard let url = Self.getUrl("commonName", ext: "txt") else {
-			return nil
-		}
-		
-		return try? String(contentsOf: url, encoding: .utf8)
-			.trimmingCharacters(in: .whitespacesAndNewlines)
 	}
 }
 

@@ -56,7 +56,6 @@ enum LocalServer {
 		let privateKeyURL = URL.documentsDirectory.appendingPathComponent("server.pem")
 		try Data(serverCertificate.serializeAsPEM().pemString.utf8).write(to: certificateURL, options: .atomic)
 		try Data(serverPrivateKey.serializeAsPEM().pemString.utf8).write(to: privateKeyURL, options: .atomic)
-		try Data(Self.serverHostname.utf8).write(to: URL.documentsDirectory.appendingPathComponent("commonName.txt"), options: .atomic)
 	}
 
 	private static func rootMaterial() throws -> RootMaterialModel {
