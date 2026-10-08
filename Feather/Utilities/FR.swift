@@ -112,7 +112,7 @@ enum FR {
 			password_check_fix_free(provision.path)
 		}
 		
-		password_check_fix(provision.path)
+		password_check_init(provision.path)
 		
 		if (!p12_password_check(key.path, password)) {
 			return false
@@ -130,31 +130,6 @@ enum FR {
 		try? fileManager.copyItem(at: url, to: dest)
 		
 		HeartbeatManager.shared.start(true)
-	}
-	
-	static func downloadSSLCertificates(
-		from urlString: String,
-		completion: @escaping (Bool) -> Void
-	) {
-		let generator = UINotificationFeedbackGenerator()
-		generator.prepare()
-		
-		NBFetchService().fetch(from: urlString) { (result: Result<ServerView.ServerPackModel, Error>) in
-			switch result {
-			case .success(let pack):
-				do {
-					try FileManager.forceWrite(content: pack.key, to: "server.pem")
-					try FileManager.forceWrite(content: pack.cert, to: "server.crt")
-					try FileManager.forceWrite(content: pack.info.domains.commonName, to: "commonName.txt")
-					generator.notificationOccurred(.success)
-					completion(true)
-				} catch {
-					completion(false)
-				}
-			case .failure(_):
-				completion(false)
-			}
-		}
 	}
 	
 	static func handleSource(
@@ -186,7 +161,6 @@ enum FR {
 	}
 	
 	static func exportCertificateAndOpenUrl(using template: String) {
-		// Helper that performs the export for a given certificate
 		func performExport(for certificate: CertificatePair) {
 			guard
 				let certificateKeyFile = Storage.shared.getFile(.certificate, from: certificate),
