@@ -21,7 +21,28 @@ jobs:
       - name: Prepare dependencies (Xcode)
         run: |
           ls /Applications | grep -i '^Xcode'
-          sudo xcode-select -s /Applications/Xcode_26.2.app
+          # Coba Xcode 26.3 dulu (lebih stabil dari 26.2)
+          if [ -d /Applications/Xcode_26.3.app ]; then
+            sudo xcode-select -s /Applications/Xcode_26.3.app
+          elif [ -d /Applications/Xcode_26.3.0.app ]; then
+            sudo xcode-select -s /Applications/Xcode_26.3.0.app
+          else
+            sudo xcode-select -s /Applications/Xcode_26.2.app
+          fi
+
+      - name: Clean SPM / DerivedData (fix Xcode crash)
+        run: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData || true
+          rm -rf Package.resolved || true
+          rm -rf .build SourcePackages || true
+          rm -rf /tmp/Feather || true
+
+      - name: Resolve packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project Feather.xcodeproj \
+            -scheme Feather \
+            -clonedSourcePackagesDirPath /tmp/spm-cache || true
 
       - name: Build
         run: | 
@@ -52,4 +73,4 @@ jobs:
           fail_on_unmatched_files: true
           draft: true
         env:
-          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
