@@ -52,7 +52,7 @@ jobs:
       - name: Get Version
         id: get_version
         run: |
-          VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" _build/Payload/*.app/Info.plist)
+          VERSION=$(grep '^FEATHER_PROJECT_VERSION' Feather.xcconfig | head -1 | cut -d= -f2 | tr -d ' \r')
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Upload IPA
